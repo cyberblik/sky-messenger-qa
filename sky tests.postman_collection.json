@@ -1,0 +1,312 @@
+{
+  "info": {
+    "_postman_id": "e0bf6b0e-fff3-4ee3-aad8-d751fd252b83",
+    "name": "sky tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56286167",
+    "_collection_link": "https://go.postman.co/collection/56286167-e0bf6b0e-fff3-4ee3-aad8-d751fd252b83?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "REG-01 Регистрация валидного пользователя",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 201 Created\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"В ответе есть userId\", function () {\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body).to.have.property(\"userId\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"testuser_abc\",\r\n  \"password\": \"test123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "REG-02 Повторная регистрация дубля",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 400 Bad Request\", function () {\r",
+              "    pm.response.to.have.status(400);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Сообщение об ошибке: пользователь уже существует\", function () {\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.error).to.equal(\"Пользователь уже существует\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"testuser_abc\",\r\n  \"password\": \"test123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "REG-08 Пароль из пробелов (BUG)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус должен быть 400 — пароль из пробелов недопустим\", function () {\r",
+              "    pm.response.to.have.status(400);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Сообщение об ошибке присутствует\", function () {\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body).to.have.property(\"error\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"testuser_spaces\",\r\n  \"password\": \"   \"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LOG-01 Успешный вход",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 200 OK\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"В ответе есть userId\", function () {\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body).to.have.property(\"userId\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Сообщение об успешном входе\", function () {\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.message).to.equal(\"Успешный вход\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"testuser_abc\",\r\n  \"password\": \"test123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LOG-02 Неверный парол",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 401 Unauthorized\", function () {\r",
+              "    pm.response.to.have.status(401);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Сообщение об ошибке корректное\", function () {\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.error).to.equal(\"Неверный логин или пароль\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"testuser_abc\",\r\n  \"password\": \"неверный_пароль\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SRCH-01 Поиск пользователей по части ника",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 200 OK\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Ответ является массивом\", function () {\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Найден хотя бы один пользователь\", function () {\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.length).to.be.above(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/users?search=ivan",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "users"
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "ivan"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
